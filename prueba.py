@@ -1,16 +1,14 @@
 import numpy as np
+# Abrimos el fichero en modo lectura
+f = open("datos_planetas.txt", "r")
 
-def leerCondIni(nombreFichero):
-     # Abrimos el fichero en modo lectura
-     f = open(nombreFichero, "r")
+#Leemos el archivo saltando el header y separamos en lista por planeta
+next(f)
+datos = f.read().split('\n')
 
-     datos = f.read()
 
-     f.close()
 
-     return datos
-
-datos = leerCondIni("datos_planetas.txt")
+f.close()
 
 print(datos)
-
+print(type(datos))

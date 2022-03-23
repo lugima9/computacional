@@ -14,24 +14,16 @@
 #Nota: Instalar ffmpeg extensión para convertir vídeo
 
 import math as m
-import csv
 import matplotlib.pyplot as plt
 import numpy as np
 
+#Clase de planetas (PROBAR CON LOS **ARGS)
 class Planetas:
-    def __init__(self, nombre, masa, distMedia, periodo, posicion, velAng):
+    def __init__(self, nombre, masa, distMedia, vel):
         self.nombre = nombre
         self.masa = masa
         self.distMedia = distMedia
-        self.periodo = periodo
-
-        self.posicion = posicion
-        self.velAng = velAng
-
-# Constantes globales
-
-masaSol = 1.98847e30 # [kg]
-G = 6.67430e-11 # [m3 kg-1 s-2]
+        self.vel = vel
 
 # AYUDA PARA VISUALIZACIÓN
 # --------------
@@ -57,17 +49,17 @@ def calcAcelPlaneta(estePlaneta, posiciones, masas):
     acel = -difPos/distCubo
 
     # Aceleración (x,y) del planeta debido al resto de planetas
-    for i in range(0, 7, 1):
+    for i in range(len(posiciones)):
         if i != estePlaneta:
             difPos = posiciones[estePlaneta] - posiciones[i]      #Posición relativa entre planetas
             distCubo = np.linalg.norm(difPos)**3
-            acel += masas[i]*difPos/distCubo                        #Sumamos la aceleración por el resto de planetas a la del Sol
+            acel -= masas[i]*difPos/distCubo                      #Sumamos la aceleración por el resto de planetas a la del Sol
 
     return acel
 
 # Función que calcula un paso del algoritmo de Verlet para obtener la posición y velocidad de cada planeta en el tiempo
-# Recibe: paso, instante, 
-# Devuelve: lista con nuevos (instante, array de posiciones, array de velocidades)
+# Recibe: paso, instante, posiciones, velocidades
+# Devuelve: nuevos instante, array de posiciones, array de velocidades
 
 def pasoVerlet(h, t, r, v):
 
@@ -75,7 +67,7 @@ def pasoVerlet(h, t, r, v):
     acel, w = np.zeros(8, 2), np.zeros(8, 2)
 
     # Para cada uno de los 8 planetas...
-    for i in range(0, 7, 1):
+    for i in range(len(r)):
         #Calcula la aceleración (x,y) de cada planeta       
         acel[i] = calcAcelPlaneta(i, r, m) #OJO: se mete el array r entero
         
@@ -93,21 +85,43 @@ def pasoVerlet(h, t, r, v):
     
     t += h
 
-    return (t, r, v)
+    return t, r, v
 
 # Función que obtiene los datos de los planetas de un fichero de texto
-# Recibe:  nombre del fichero
-# Devuelve:
+# Recibe:  nombre del fichero con una fila por planeta
+# Devuelve: lista con string de datos para cada planeta 
 
 def leerCondIni(nombreFichero):
-     # Abrimos el fichero en modo lectura
-     f = open(nombreFichero, "r")
+    # Abrimos el fichero en modo lectura
+    f = open(nombreFichero, "r")
 
-     datos = f.read()
+    # Leemos el archivo saltando el header y separamos en lista por planeta
+    next(f)
+    datos = f.read().split('\n')
 
-     f.close()
+    # Asignamos a cada planeta sus atributos
+    p = []
+    for i in range(len(datos)):
+        d = datos[i].split()
+        p[i] = Planetas(d[0], d[1], d[2], d[3])
 
-     return datos
+    f.close()
+
+    return p
+
+# Función que realiza el cambio de unidades de reescalado
+# Recibe: paso, array de posiciones iniciales, array de masas
+# Devuelve: lista con paso, array de posiciones iniciales, array de masas (reescalado)
+def reescala(h, r, m):
+    c = 299792458           #[m s-1]
+    masaSol = 1.98847e30    # [kg]
+    G = 6.67430e-11         # [m3 kg-1 s-2]
+
+    h = sqrt(G*masaSol/c**3)*h
+    r = r/c
+    m = m/masaSol
+
+    return (h, r, m)
 
 # FUNCIÓN PRINCIPAL
 
