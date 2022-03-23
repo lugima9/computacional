@@ -1,0 +1,11 @@
+# Nombre	Masa (x10^24 kg)	Exc.
+Mercurio	0.330			0.206
+Venus		4.87			0.007
+Tierra		5.97			0.017
+Marte		0.642			0.094
+Jupiter		1898			0.049
+Saturno		568			0.052
+Urano		86.8			0.047
+Neptuno		102			0.010
+
+#https://nssdc.gsfc.nasa.gov/planetary/factsheet/
