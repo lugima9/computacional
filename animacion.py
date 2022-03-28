@@ -182,7 +182,7 @@ if nframes > 1:
 
     # Muestra por pantalla o guarda según parámetros
     if save_to_file:
-        animation.save("{}.gif".format(file_out), dpi=dpi)
+        animation.save("{}.mp4".format(file_out), dpi=dpi)
     else:
         plt.show()
 # En caso contrario, muestra o guarda una imagen

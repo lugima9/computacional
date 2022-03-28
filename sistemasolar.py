@@ -13,15 +13,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import random
 
-"-------------------------------------CLASES--------------------------------------------"
-# class Planetas:
-#     def __init__(self, nombre, masa, distMedia, vel, *args):
-#         self.nombre = nombre
-#         self.masa = masa
-#         self.distMedia = distMedia
-#         self.vel = vel
-#         self.args = args
-
 "------------------------------------FUNCIONES------------------------------------------"
 
 # Función que calcula la aceleración (x,y) de un planeta en un instante por acción del Sol y el resto de planetas
@@ -41,7 +32,7 @@ def calcAcelPlaneta(estePlaneta, posiciones, masas):
     # Aceleración (x,y) del planeta debido al resto de planetas
     for i in range(numeroPlanetas):
         if i != estePlaneta:
-            difPos = posiciones[estePlaneta] - posiciones[i]      #Posición relativa entre planetas
+            difPos = posiciones[estePlaneta] - posiciones[i]     #Posición relativa entre planetas
             distCubo = np.linalg.norm(difPos)**3
             acel -= masas[i]*difPos/distCubo                     #Sumamos la aceleración por el resto de planetas a la del Sol
 
@@ -54,27 +45,26 @@ def calcAcelPlaneta(estePlaneta, posiciones, masas):
 def pasoVerlet(h, m, r, v):
 
     numeroPlanetas = len(r)
-    #Creo dos arrays 3D auxiliares de 8 (nº planetas) x 2 (x,y)
-    acel, w = np.zeros((numeroPlanetas, 2)), np.zeros((numeroPlanetas, 2))
+    #Creo array de acel. 3D de 8 (nº planetas) x 2 (x,y)
+    acel = np.zeros((numeroPlanetas, 2))
 
     # Para cada uno de los 8 planetas...
     for i in range(numeroPlanetas):
         #Calcula la aceleración (x,y) del planeta       
         acel[i] = calcAcelPlaneta(i, r, m) #OJO: se mete el array r entero
     
-    for i in range(numeroPlanetas):
-        #Cálculo intermedio (x,y) del planeta
-        w[i] = v[i] + 0.5*h*acel[i]
+    #Cálculo intermedio (x,y) del planeta
+    w = v + 0.5*h*acel
 
-        #Calcula la nueva posición (x,y) del planeta
-        r[i] += h*w[i]
+    #Calcula la nueva posición (x,y) del planeta
+    r += h*w
     
     for i in range(numeroPlanetas):
         #Calcula la nueva aceleración (x,y) del planeta
         acel[i] = calcAcelPlaneta(i, r, m)
 
-        #Calcula la nueva velocidad (x,y) del planeta
-        v[i] = w[i] + 0.5*h*acel[i]
+    #Calcula la nueva velocidad (x,y) del planeta
+    v = w + 0.5*h*acel
 
     return r, v
 
@@ -141,7 +131,6 @@ def inicioAleatorio(distancias, velocidades):
     # Para cada planeta (tantos como elementos en distancias[])
     r, v = np.zeros((numeroPlanetas, 2)), np.zeros((numeroPlanetas, 2))
     for i in range(numeroPlanetas):
-
         # Genero una coordenada polar aleatoria
         angulo = random.randrange(0, 1)*2*np.pi
         coseno = m.cos(angulo)
@@ -174,7 +163,7 @@ def inicioAlineado(distancias, velocidades):
 
         # Fijo velocidad inicial en (0, v)
         v[i,0] = 0.
-        v[i,1] = velocidades[i]       
+        v[i,1] = velocidades[i]  
 
     return r, v
 
@@ -183,7 +172,7 @@ def inicioAlineado(distancias, velocidades):
 
 # Preguntamos condiciones de simulación
 t=0.
-t_max = 10. # (En la versión definitiva, se pide al usuario)
+t_max = 2 # (En la versión definitiva, se pide al usuario)
 
 h = float(input("Introduzca el paso: \n"))
 
