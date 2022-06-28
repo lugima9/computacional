@@ -1,0 +1,5 @@
+Temperatura crítica para N = 16.0: 2.5123456790123457
+Temperatura crítica para N = 32.0: 2.3641975308641974
+Temperatura crítica para N = 64.0: 2.314814814814815
+Temperatura crítica para N = 128.0: 2.265432098765432
+Temperatura crítica extrapolada: 2.2353730544565877 +/- 0.008852615835879232

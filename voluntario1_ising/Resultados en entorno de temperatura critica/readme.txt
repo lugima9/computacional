@@ -1,0 +1,3 @@
+Nota: El archivo specheat_wip.dat contiene los resultados de energía, energía^2 y sus desv. est. para cada temperaturas, mientras que el archivo specheat_def.dat contiene los resultados de calor específico con sus barras de error par cada temperatura.
+
+magnet_16_extra.dat contiene los resultados de magnetización para N = 16, que quedan fuera del entorno del punto crítico, para los que esta magnitud corta con el valor m_N = 0.5.

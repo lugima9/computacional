@@ -1,0 +1,1 @@
+Nota: El archivo specheat_wip.dat contiene los resultados de energía, energía^2 y sus desv. est. para cada temperaturas, mientras que el archivo specheat_def.dat contiene los resultados de calor específico con sus barras de error par cada temperatura.
